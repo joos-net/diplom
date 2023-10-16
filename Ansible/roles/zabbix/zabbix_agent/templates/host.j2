@@ -1,0 +1,38 @@
+{
+    "jsonrpc": "2.0",
+    "method": "host.create",
+    "params": {
+        "host": "{{ ansible_hostname }}",
+        "interfaces": [
+            {
+                "type": 1,
+                "main": 1,
+                "useip": 1,
+                "ip": "{{ ansible_default_ipv4.address }}",
+                "dns": "",
+                "port": "10050"
+            }
+        ],
+        "groups": [
+            {
+                "groupid": "{{ hostvars['zabbix_g']['group_id'] }}"
+            }
+        ],
+        "tags": [
+            {
+                "tag": "Host name",
+                "value": "{{ ansible_hostname }}"
+            }
+        ],
+        "templates": [
+            {
+                "templateid": "10001"
+            },
+            {
+                "templateid": "10266"
+            }
+        ],
+    },
+    "id": 2,
+    "auth" : "{{ hostvars['zabbix_s']['auth_id'] }}"
+}

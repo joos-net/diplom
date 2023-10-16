@@ -1,0 +1,22 @@
+network.host: 0.0.0.0
+# path.logs: /var/log/elasticsearch
+# path.data: /var/lib/elasticsearch
+http.port: 9200
+#discovery.seed_hosts: ["127.0.0.1"]
+discovery.type: single-node
+
+# Enable security features
+xpack.security.enabled: true
+xpack.security.enrollment.enabled: true
+
+# Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
+# xpack.security.http.ssl:
+#   enabled: true
+#   keystore.path: certs/http.p12
+
+# Enable encryption and mutual authentication between cluster nodes
+# xpack.security.transport.ssl:
+#   enabled: true
+#   verification_mode: certificate
+#   keystore.path: certs/transport.p12
+#   truststore.path: certs/transport.p12

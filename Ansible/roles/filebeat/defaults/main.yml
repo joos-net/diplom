@@ -1,0 +1,20 @@
+---
+filebeat_version: "8.10.2"
+filebeat_package: "elastic/filebeat"
+filebeat_package_state: present
+
+filebeat_create_config: true
+filebeat_template: "filebeat.yml.j2"
+filebeat_template_nginx: "filebeat_nginx.yml.j2"
+
+filebeat_output_logstash_enabled: false
+filebeat_output_logstash_hosts:
+  - "{{ groups['elastic'] | join('') }}:5000"
+filebeat_output_logstash_hosts_nginx:
+  - "{{ groups['elastic'] | join('') }}:5044"
+
+filebeat_enable_logging: false
+filebeat_log_level: warning
+filebeat_log_dir: /var/log/mybeat
+filebeat_log_filename: mybeat.log
+

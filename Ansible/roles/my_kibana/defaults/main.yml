@@ -1,0 +1,16 @@
+---
+# defaults file for my_kibana
+elasticsearch_local_certs_dir: ~/Desktop/very_secure_dir
+kibana_image: "kibana:8.10.2"
+
+log_driver: "json-file"
+log_max_size: "10m"
+log_max_file: "3"
+
+kibana_index_pattern: "zabbix-server-*"
+kibana_time_filter: "@timestamp"
+
+elastic_pass: DkIedPPSCbeje34i4
+elastic_user: elastic
+
+kibana_user: kibana_system

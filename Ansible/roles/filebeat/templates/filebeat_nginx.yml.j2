@@ -1,0 +1,28 @@
+filebeat:
+
+  # List of inputs.
+  inputs:
+  - type: log
+    enabled: true
+    paths:
+      - "/var/log/nginx/access.log"
+    fields:
+    tags: ["web-log"]
+    fields_under_root: true
+    scan_frequency: 5s
+  - type: log
+    enabled: true
+    paths:
+      - "/var/log/nginx/error.log"
+    fields:
+    tags: ["web-log"]
+    fields_under_root: true
+    scan_frequency: 5s
+
+# Configure what outputs to use when sending the data collected by the beat.
+# Multiple outputs may be used.
+
+output:
+  logstash:
+    # The Logstash hosts
+    hosts: {{ filebeat_output_logstash_hosts_nginx | to_json }}

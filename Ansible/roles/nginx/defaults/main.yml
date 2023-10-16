@@ -1,0 +1,6 @@
+---
+# defaults file for roles/nginx
+
+server_name: "{{ ansible_hostname }}"
+document_root: /var/www/html
+app_root: html_demo_site-main

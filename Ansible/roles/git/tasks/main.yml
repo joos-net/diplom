@@ -1,0 +1,5 @@
+---
+# tasks file for git
+
+- name: push README
+  shell: 'cd /Users/joos/dip-zabb; git add "README.md"; git commit -m "Autoupdate $(date)"; git push'

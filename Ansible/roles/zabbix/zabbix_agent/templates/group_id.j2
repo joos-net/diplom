@@ -1,0 +1,14 @@
+{
+    "jsonrpc": "2.0",
+    "method": "hostgroup.get",
+    "params": {
+        "output": "extend",
+        "filter": {
+            "name": [
+                "Netology"
+            ]
+        }
+    },
+    "id": 2,
+    "auth" : "{{ hostvars['zabbix_s']['auth_id'] }}"
+}

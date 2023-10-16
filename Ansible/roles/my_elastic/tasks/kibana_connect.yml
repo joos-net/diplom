@@ -1,0 +1,45 @@
+---
+- name: stop logstash
+  service: 
+    name: logstash 
+    state: stopped
+  ignore_errors: true
+
+- name: reset kibana_system password
+  become: true
+  expect:
+    command: /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system -s
+    responses: 
+      'Please confirm that you would like to continue \[y/N\]': 'y'
+  register: kibana_pass
+
+- name: reset elastic password
+  become: true
+  expect:
+    command: /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -s
+    responses: 
+      'Please confirm that you would like to continue \[y/N\]': 'y'
+  register: elastic_pass
+
+- name: write elastic to file for kibana web-logging
+  ansible.builtin.copy:
+    content: "Password: {{ elastic_pass.stdout[-20:] }}"
+    dest: "/tmp/elastic.txt"
+
+- name: copy pass elastic to master-ansible
+  ansible.builtin.fetch:
+    src:  /tmp/elastic.txt
+    dest: "{{ elasticsearch_local_certs_dir }}/elastic.txt"
+    flat: true
+
+- name: copy crt for kibana
+  ansible.builtin.fetch:
+    src:  /etc/elasticsearch/certs/http_ca.crt
+    dest: "{{ elasticsearch_local_certs_dir }}/http_ca.crt"
+    flat: true
+
+- name: Add kibana_pass and host to hostvars
+  add_host:
+    name: "elastic"
+    kibana_pass:  "{{ kibana_pass.stdout[-20:] }}"
+    elastic_pass: "{{ elastic_pass.stdout[-20:] }}"

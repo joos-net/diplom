@@ -1,0 +1,10 @@
+
+# tasks file for my_elastic
+---
+- name: Install elastic
+  include_tasks:
+      file: install.yml
+
+# - name: Pass and cert for kibana
+#   include_tasks:
+#       file: kibana_connect.yml

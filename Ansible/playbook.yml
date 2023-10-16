@@ -1,0 +1,56 @@
+---
+- name: install zabbix-server
+  hosts: zabbix-server
+  become: true
+  roles: 
+   - zabbix/zabbix_server
+
+- name: install zabbix-web
+  hosts: zabbix-web
+  become: true
+  roles:
+   - zabbix/php
+   - zabbix/zabbix_web
+
+- name: install zabbix-agent server
+  hosts: zabbix-server
+  become: true
+  roles:
+   - zabbix/zabbix_agent
+
+- name: install zabbix-agent
+  hosts: zabbix-web, elastic, kibana, web1, web2, web3
+  become: true
+  roles:
+   - zabbix/zabbix_agent
+
+- name: install elastic
+  hosts: elastic
+  become: true
+  roles:
+  - my_elastic
+  - logstash
+  
+- name: install kibana
+  hosts: kibana
+  become: true
+  roles:
+   - my_kibana
+
+- name: Install filebeat
+  hosts: zabbix-server, zabbix-web, elastic, kibana, web1, web2, web3
+  become: true
+  roles: 
+   - filebeat
+
+- name: install nginx
+  hosts: web1, web2, web3
+  become: true
+  roles:
+   - nginx
+
+- name: update git
+  hosts: localhost
+  gather_facts: false
+  roles:
+   - git

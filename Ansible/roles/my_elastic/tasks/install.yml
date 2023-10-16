@@ -1,0 +1,105 @@
+---
+# tasks file for roles/elastic
+- name: Install aptitude
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+
+- name: Install required system packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: Create elastic search volume
+  docker_volume:
+    name: esdata
+    driver: local
+
+- name: Copy elasticsearch configuration
+  copy:
+    src: "files/elasticsearch.yml"
+    dest: "/tmp/elasticsearch.yml"
+    owner: root
+    mode: 0644
+
+- name: Start elasticsearch container
+  docker_container:
+    name: "{{ elasticsearch_hostname }}"
+    image: "{{ elasticsearch_image }}"
+    env:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      xpack.security.enabled: "true"
+      xpack.monitoring.collection.enabled: "true"
+      ELASTIC_USERNAME: "{{ elastic_user }}"
+      ELASTIC_PASSWORD: "{{ elastic_pass }}"
+    volumes:
+    - "esdata:/usr/share/elasticsearch/data"
+    - "/tmp/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
+    ulimits:
+    - nofile:65535:65535
+    ports:
+    - 9200:9200
+    - 9300:9300
+    state: started
+    log_driver: "{{ log_driver }}"
+    log_options:
+      max-size: "{{ log_max_size }}"
+      max-file: "{{ log_max_file }}"
+
+- name: Pause 1 minute for container start
+  ansible.builtin.pause:
+    minutes: 1
+
+- name: Stop logstash container
+  docker_container:
+    name: "{{ logstash_hostname }}"
+    state: stopped
+  ignore_errors: true
+
+- name: container id
+  become: true
+  shell: "docker ps | grep elasticsearch | awk '{ print $1 }'"
+  register: container_id
+
+- name: reset kibana_system password
+  become: true
+  expect:
+    command: "sudo docker exec -it {{ container_id.stdout }} /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system -s"
+    responses: 
+      'Please confirm that you would like to continue \[y/N\]': 'y'
+  register: kibana_pass
+
+- name: Add kibana_pass and host to hostvars
+  add_host:
+    name: "kilastic"
+    kibana_pass:  "{{ kibana_pass.stdout[-20:] }}"

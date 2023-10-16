@@ -1,0 +1,86 @@
+---
+# tasks file for roles/grafana
+
+- name: Install aptitude
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+
+- name: Install required system packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: Start kibana container
+  docker_container:
+    name: kibana
+    image: "{{ kibana_image }}"
+    env:
+      servername: kibana
+      ELASTICSEARCH_HOSTS: "http://{{ groups['elastic'] | join('')}}:9200"
+      ELASTICSEARCH_USERNAME: "{{ kibana_user }}"
+      ELASTICSEARCH_PASSWORD: "{{ hostvars['kilastic']['kibana_pass'] }}"
+    ports:
+    - 5601:5601
+    log_driver: "{{ log_driver }}"
+    log_options:
+      max-size: "{{ log_max_size }}"
+      max-file: "{{ log_max_file }}"
+
+- name: Pause 1 minute for container start
+  ansible.builtin.pause:
+    minutes: 1
+
+- name: "Create index server-*"
+  uri:
+    url: "http://{{ groups['kibana'] | join('')}}:5601/api/saved_objects/index-pattern"
+    method: POST
+    user: "{{ elastic_user }}"
+    password: "{{ elastic_pass }}"
+    body: '{"attributes": {"title": "{{ item }}","timeFieldName" : "@timestamp"}}'
+    body_format: json
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json; charset=utf-8"
+      kbn-xsrf: true
+  with_items:
+      - elastic-*
+      - kibana-*
+      - web-log-*
+      - zabbix-web-*
+      - zabbix-server-*
+  register: index
+  run_once: true
+
+- name: "debug"
+  debug:
+    var: index

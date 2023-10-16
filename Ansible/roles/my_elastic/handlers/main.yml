@@ -1,0 +1,6 @@
+---
+# handlers file for my_elastic
+- name: restart elasticsearch
+  systemd:
+    state: restarted
+    name: elasticsearch

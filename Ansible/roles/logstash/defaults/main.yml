@@ -1,0 +1,33 @@
+---
+logstash_package: logstash
+
+logstash_listen_port_beats: 5044
+
+logstash_elasticsearch_hosts:
+  - http://{{ groups['elastic'] | join('')}}:9200
+
+logstash_local_syslog_path: /var/log/syslog
+logstash_monitor_local_syslog: true
+
+logstash_dir: /usr/share/logstash
+
+#logstash_ssl_dir: /etc/pki/logstash
+#logstash_ssl_certificate_file: ""
+#logstash_ssl_key_file: ""
+
+logstash_enabled_on_boot: true
+
+logstash_setup_default_config: true
+
+elasticsearch_local_certs_dir: ~/Desktop/very_secure_dir
+
+elastic_pass: DkIedPPSCbeje34i4
+elastic_user: elastic
+
+logstash_image: logstash:8.10.2
+logstash_hostname: lo01
+logstash_conf_dir: /usr/share/logstash
+
+log_driver: "json-file"
+log_max_size: "10m"
+log_max_file: "3"

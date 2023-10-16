@@ -1,1 +1,2 @@
-# diplom
+# diplom-zabbix
+Same with zabbix

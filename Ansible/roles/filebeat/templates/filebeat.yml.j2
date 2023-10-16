@@ -1,0 +1,18 @@
+filebeat:
+
+  # List of inputs.
+    inputs:
+    - type: log
+      enabled: true
+      paths:
+        - "/var/log/syslog"
+      fields:
+      tags: ["{{ ansible_hostname }}"]
+
+# Configure what outputs to use when sending the data collected by the beat.
+# Multiple outputs may be used.
+
+output:
+  logstash:
+    # The Logstash hosts
+    hosts: {{ filebeat_output_logstash_hosts | to_json }}

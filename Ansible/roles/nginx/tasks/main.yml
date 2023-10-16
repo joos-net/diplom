@@ -1,0 +1,46 @@
+---
+# tasks file for roles/nginx
+- name: Update apt cache and install Nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+
+- name: Copy website files to the server's document root
+  copy:
+    src: "{{ app_root }}"
+    dest: "{{ document_root }}"
+    mode: preserve
+
+- name: Add Nginx template
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify: Restart Nginx
+
+- name: Add Zabbix permissions
+  template:
+    src: status.conf.j2
+    dest: /etc/nginx/conf.d/status.conf
+  notify: Restart Nginx
+
+- name: Enable new site
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  notify: Restart Nginx
+
+- name: Allow all access to tcp port 80
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+
+- name: Change file permissions for container
+  ansible.builtin.file:
+    path: /var/log/nginx/{{ item }}
+    mode: '0777'
+  with_items:
+    - error.log
+    - access.log

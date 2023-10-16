@@ -1,0 +1,75 @@
+---
+# tasks file for roles/grafana
+- name: Install aptitude
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: true
+
+- name: Install required system packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
+    update_cache: true
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: true
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+
+- name: Copy Filebeat configuration.
+  template:
+    src: "{{ filebeat_template }}"
+    dest: "/tmp/filebeat.yml"
+    owner: root
+    group: root
+    mode: 0644
+  when: '"kibana" in ansible_hostname or "elastic" in ansible_hostname or "zabbix-server" in ansible_hostname or "zabbix-web" in ansible_hostname'
+
+- name: Copy Filebeat nginx configuration.
+  template:
+    src: "{{ filebeat_template_nginx }}"
+    dest: "/tmp/filebeat.yml"
+    owner: root
+    group: root
+    mode: 0644
+  when: '"web1" in ansible_hostname or "web2" in ansible_hostname or "web3" in ansible_hostname'
+
+- name: Change file permissions for container
+  ansible.builtin.file:
+    path: /var/log/syslog
+    mode: '0777'
+
+- name: Create Filebeat container
+  docker_container:
+    name: filebeat
+    restart_policy: always
+    image: "{{ filebeat_package }}:{{ filebeat_version }}"
+    volumes:
+      - /tmp/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log/nginx:/var/log/nginx:ro
+      - /var/log/syslog:/var/log/syslog:ro

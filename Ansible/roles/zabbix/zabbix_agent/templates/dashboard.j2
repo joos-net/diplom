@@ -1,0 +1,758 @@
+{
+    "jsonrpc": "2.0",
+    "method": "dashboard.create",
+    "params": {
+        "name": "Netology",
+        "display_period": 30,
+        "auto_start": 1,
+        "pages": [
+                {
+                    "widgets": [
+                        {
+                            "type": "hostavail",
+                            "name": "",
+                            "x": "0",
+                            "y": "0",
+                            "width": "6",
+                            "height": "2",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "0",
+                                    "name": "interface_type",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "Network WEB",
+                            "x": "12",
+                            "y": "2",
+                            "width": "12",
+                            "height": "3",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.0",
+                                    "value": "web1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.1",
+                                    "value": "web2"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.2",
+                                    "value": "web3"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "Interface eth0: Bits received"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "Interface eth0: Bits sent"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "4000FF"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "tophosts",
+                            "name": "AVG 1 Min",
+                            "x": "0",
+                            "y": "11",
+                            "width": "8",
+                            "height": "5",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "2",
+                                    "name": "groupids",
+                                    "value": "22"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.name.0",
+                                    "value": "Name"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.data.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.item.0",
+                                    "value": "Linux: System name"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.timeshift.0",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.aggregate_function.0",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.decimal_places.0",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.display.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.history.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.base_color.0",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.data.1",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.item.1",
+                                    "value": "Linux: Load average (1m avg)"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.timeshift.1",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.aggregate_function.1",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.min.1",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.max.1",
+                                    "value": "0.9"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.decimal_places.1",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.display.1",
+                                    "value": "3"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.history.1",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.base_color.1",
+                                    "value": "FFFF00"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.name.1",
+                                    "value": "AVG"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "column",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "tophosts",
+                            "name": "AVG 5 Min",
+                            "x": "8",
+                            "y": "11",
+                            "width": "8",
+                            "height": "5",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "2",
+                                    "name": "groupids",
+                                    "value": "22"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.name.0",
+                                    "value": "Name"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.data.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.item.0",
+                                    "value": "Linux: System name"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.timeshift.0",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.aggregate_function.0",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.decimal_places.0",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.display.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.history.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.base_color.0",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.name.1",
+                                    "value": "AVG"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.data.1",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.item.1",
+                                    "value": "Linux: Load average (5m avg)"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.timeshift.1",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.aggregate_function.1",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.min.1",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.max.1",
+                                    "value": "0.9"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.decimal_places.1",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.display.1",
+                                    "value": "3"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.history.1",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.base_color.1",
+                                    "value": "FFBF00"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "column",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "tophosts",
+                            "name": "AVG 15 Min",
+                            "x": "16",
+                            "y": "11",
+                            "width": "8",
+                            "height": "5",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "2",
+                                    "name": "groupids",
+                                    "value": "22"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.name.0",
+                                    "value": "Name"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.data.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.item.0",
+                                    "value": "Linux: System name"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.timeshift.0",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.aggregate_function.0",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.decimal_places.0",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.display.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.history.0",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.base_color.0",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.name.1",
+                                    "value": "AVG"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.data.1",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.item.1",
+                                    "value": "Linux: Load average (15m avg)"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.timeshift.1",
+                                    "value": ""
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.aggregate_function.1",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.min.1",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.max.1",
+                                    "value": "0.9"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.decimal_places.1",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.display.1",
+                                    "value": "3"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "columns.history.1",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "columns.base_color.1",
+                                    "value": "FF4000"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "column",
+                                    "value": "1"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "RAM",
+                            "x": "0",
+                            "y": "5",
+                            "width": "12",
+                            "height": "3",
+                            "view_mode": "0",
+                            "fields": [
+{% for n in zabbix_agent_s %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.{{loop.index0}}",
+                                    "value": "{{ n }}"
+                                },
+{% endfor %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "Linux: Available memory"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "Linux: Available memory in %"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "BF00FF"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.2",
+                                    "value": "Linux: Memory utilization"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "Network servers",
+                            "x": "12",
+                            "y": "5",
+                            "width": "12",
+                            "height": "3",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.0",
+                                    "value": "kibana"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.1",
+                                    "value": "elastic"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.2",
+                                    "value": "zabbix-web"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.3",
+                                    "value": "zabbix-server"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "Interface eth0: Bits received"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "Interface eth0: Bits sent"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "4000FF"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "CPU",
+                            "x": "0",
+                            "y": "2",
+                            "width": "12",
+                            "height": "3",
+                            "view_mode": "0",
+                            "fields": [
+{% for n in zabbix_agent_s %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.{{loop.index0}}",
+                                    "value": "{{ n }}"
+                                },
+{% endfor %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "Linux: CPU utilization"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "Linux: CPU system time"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.2",
+                                    "value": "Linux: CPU user time"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "FF0000"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "DISK",
+                            "x": "0",
+                            "y": "8",
+                            "width": "12",
+                            "height": "3",
+                            "view_mode": "0",
+                            "fields": [
+{% for n in zabbix_agent_s %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.{{loop.index0}}",
+                                    "value": "{{ n }}"
+                                },
+{% endfor %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "/: Total space"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "/: Used space"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "00FF00"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.2",
+                                    "value": "vda: Disk utilization"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "AVG",
+                            "x": "12",
+                            "y": "8",
+                            "width": "12",
+                            "height": "3",
+                            "view_mode": "0",
+                            "fields": [
+{% for n in zabbix_agent_s %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.{{loop.index0}}",
+                                    "value": "{{ n }}"
+                                },
+{% endfor %}
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "Linux: Load average (1m avg)"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "Linux: Load average (5m avg)"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.2",
+                                    "value": "Linux: Load average (15m avg)"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "F9A825"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "svggraph",
+                            "name": "NGINX Connections",
+                            "x": "6",
+                            "y": "0",
+                            "width": "18",
+                            "height": "2",
+                            "view_mode": "0",
+                            "fields": [
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.0",
+                                    "value": "web1"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.1",
+                                    "value": "web2"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.hosts.0.2",
+                                    "value": "web3"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.0",
+                                    "value": "Nginx: Connections active"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.1",
+                                    "value": "Nginx: Connections reading"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.2",
+                                    "value": "Nginx: Connections waiting"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.items.0.3",
+                                    "value": "Nginx: Connections writing"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "righty",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "0",
+                                    "name": "legend",
+                                    "value": "0"
+                                },
+                                {
+                                    "type": "1",
+                                    "name": "ds.color.0",
+                                    "value": "666699"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+        "userGroups": [],
+        "users": []
+    },
+    "id": 2,
+    "auth" : "{{ hostvars['zabbix_s']['auth_id'] }}"
+}

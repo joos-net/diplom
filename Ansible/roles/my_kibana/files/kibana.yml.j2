@@ -1,0 +1,11 @@
+server.port: "5601"
+server.host: "0.0.0.0"
+elasticsearch.hosts: "https://{{ groups['elastic'] | join('')}}:9200"
+server.publicBaseUrl: "http://{{ groups['kibana'] | join('')}}:5601/"
+
+#elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/http_ca.crt" ]
+
+#pack.security.enabled: true
+
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "{{ hostvars['elastic']['kibana_pass'] }}"

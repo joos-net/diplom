@@ -1,0 +1,92 @@
+---
+# - name: Restart apache2
+#   service:
+#     name: apache2
+#     state: restarted
+#   when: '"zabbix" in ansible_hostname'
+
+- name: "Get ID"
+  uri: 
+    url: "http://{{ groups['zabbix-web'] | join('')}}/zabbix/api_jsonrpc.php"
+    method: POST
+    body_format: json
+    body: "{{ lookup('file','id.json') }}"
+  register: user_id
+
+# - name: "debug"
+#   debug:
+#     var: user_id.json.result
+#   ignore_errors: true
+  
+- name: Add user_id to hostvars
+  add_host:
+    name: "zabbix_s"
+    auth_id:  "{{ user_id.json.result }}"
+
+- name: "Add hostgroup"
+  uri: 
+    url: "http://{{ groups['zabbix-web'] | join('')}}/zabbix/api_jsonrpc.php"
+    method: POST
+    body_format: json
+    body: "{{ lookup('template', 'hostgroup_add.j2') | to_nice_json }}"
+  when: '"zabbix-server" in ansible_hostname'
+  ignore_errors: true
+
+- name: "Check group_id"
+  uri: 
+    url: "http://{{ groups['zabbix-web'] | join('')}}/zabbix/api_jsonrpc.php"
+    method: POST
+    body_format: json
+    body: "{{ lookup('template', 'group_id.j2') | to_nice_json }}"
+  register: group_id
+  #when: '"zabbix-server" not in ansible_hostname'
+  ignore_errors: true
+
+# - name: "debug"
+#   debug:
+#     var: group_id.json.result[0].groupid
+#   ignore_errors: true
+#   when: '"zabbix" not in ansible_hostname'
+
+- name: Add group_id to hostvars
+  add_host:
+    name: "zabbix_g"
+    group_id:  "{{ group_id.json.result[0].groupid }}"
+  #when: '"zabbix-server" not in ansible_hostname'
+
+# - name: "debug"
+#   debug:
+#     var: group_id.json.result[0].groupid
+#   ignore_errors: true
+
+- name: "Add host"
+  uri: 
+    url: "http://{{ groups['zabbix-web'] | join('')}}/zabbix/api_jsonrpc.php"
+    method: POST
+    body_format: json
+    body: "{{ lookup('template', 'host.j2') | to_nice_json }}"
+  register: server_id
+  #when: '"zabbix-server" not in ansible_hostname'
+  ignore_errors: true
+
+# - name: "debug"
+#   debug:
+#     var: server_id
+#   ignore_errors: true
+  #when: '"zabbix-server" not in ansible_hostname'
+
+- name: "Add dashboard"
+  uri: 
+    url: "http://{{ groups['zabbix-web'] | join('')}}/zabbix/api_jsonrpc.php"
+    method: POST
+    body_format: json
+    body: "{{ lookup('template', 'dashboard.j2') | to_nice_json }}"
+  register: dashboard_id
+  when: '"zabbix-server" in ansible_hostname'
+  ignore_errors: true
+
+- name: "debug"
+  debug:
+    var: dashboard_id
+  ignore_errors: true
+  when: '"zabbix-server" in ansible_hostname'

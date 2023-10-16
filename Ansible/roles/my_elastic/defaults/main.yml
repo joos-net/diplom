@@ -1,0 +1,14 @@
+---
+# defaults file for my_elastic
+elasticsearch_local_certs_dir: ~/Desktop/very_secure_dir
+
+elasticsearch_image: elasticsearch:8.10.2
+elasticsearch_hostname: es01
+elasticsearch_conf_dir: /usr/share/elasticsearch
+
+log_driver: "json-file"
+log_max_size: "10m"
+log_max_file: "3"
+
+elastic_pass: DkIedPPSCbeje34i4
+elastic_user: elastic
