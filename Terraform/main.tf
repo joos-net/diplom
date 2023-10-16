@@ -100,7 +100,7 @@ resource "local_file" "private_key" {
 }
 ################### Create hosts Ansible ######################
 resource "local_file" "hosts" {
-  filename = pathexpand("~/dip-zabb/Ansible/hosts")
+  filename = pathexpand("~/diplom/Ansible/hosts")
   content  = <<-EOT
     %{for server in yandex_compute_instance.vm}
     [${server.hostname}]
@@ -139,7 +139,7 @@ resource "local_file" "config" {
 }
 ################### Create README ######################
 resource "local_file" "readme" {
-  filename = pathexpand("~/dip-zabb/README.md")
+  filename = pathexpand("~/diplom/README-INFO.md")
   content  = <<-EOT
    Zabbix+
    
