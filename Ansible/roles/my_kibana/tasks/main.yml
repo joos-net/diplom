@@ -80,7 +80,3 @@
       - zabbix-server-*
   register: index
   run_once: true
-
-- name: "debug"
-  debug:
-    var: index

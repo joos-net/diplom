@@ -2,7 +2,7 @@
 *terraform.tfstate
 *terraform.tfstate.backup
 *.DS_Store
-*/.vscode
+*.vscode
 */default.tf
 */terraform.tfvars
 */meta.yml
