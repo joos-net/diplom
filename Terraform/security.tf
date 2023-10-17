@@ -2,6 +2,7 @@
 ###################### NAT group ######################
 resource "yandex_vpc_security_group" "nat" {
   name       = "nat"
+  description = "nat"
   network_id = yandex_vpc_network.network-1.id
 
   egress {
@@ -33,7 +34,7 @@ resource "yandex_vpc_security_group" "self" {
 ###################### Load Balancer ######################
 resource "yandex_vpc_security_group" "lb" {
   name        = "lb"
-  description = "in group"
+  description = "load balancer"
   network_id  = yandex_vpc_network.network-1.id
   ingress {
     description    = "Allow http"
@@ -63,7 +64,7 @@ resource "yandex_vpc_security_group" "lb" {
 ###################### Bastion ######################
 resource "yandex_vpc_security_group" "bastion" {
   name        = "bastion"
-  description = "work group"
+  description = "bastion sg"
   network_id  = yandex_vpc_network.network-1.id
 
   ingress {
@@ -82,7 +83,7 @@ resource "yandex_vpc_security_group" "bastion" {
 ###################### Kibana ######################
 resource "yandex_vpc_security_group" "kibana" {
   name        = "kibana"
-  description = "work group"
+  description = "kibana sg"
   network_id  = yandex_vpc_network.network-1.id
 
   ingress {
@@ -101,7 +102,7 @@ resource "yandex_vpc_security_group" "kibana" {
 ###################### Zabbix Web ######################
 resource "yandex_vpc_security_group" "zabbix" {
   name        = "zabbix"
-  description = "work group"
+  description = "zabbix sg"
   network_id  = yandex_vpc_network.network-1.id
 
   ingress {

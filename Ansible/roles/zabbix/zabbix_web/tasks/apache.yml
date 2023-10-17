@@ -73,3 +73,5 @@
   tags:
     - config
 
+- name: Set-Timezone
+  command: timedatectl set-timezone Europe/Moscow
