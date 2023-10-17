@@ -141,7 +141,7 @@ resource "local_file" "config" {
 resource "local_file" "readme" {
   filename = pathexpand("~/diplom/README-INFO.md")
   content  = <<-EOT
-   Zabbix+
+   Diplom
    
    Zabbix:
    - Zabbix Server IP - ${yandex_compute_instance.vm["zabbix-web"].network_interface.0.nat_ip_address}

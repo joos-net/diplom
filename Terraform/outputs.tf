@@ -5,5 +5,5 @@
  }
 
 output "test" {
-  value = yandex_compute_instance_group.ig-1.instance_template[*]
+  value = yandex_compute_instance_group.ig-1.instances[*]
 } */
