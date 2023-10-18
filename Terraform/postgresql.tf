@@ -1,5 +1,5 @@
 
-###################### Postgresqg Cluster ######################
+###################### Postgresql Cluster ######################
 resource "yandex_mdb_postgresql_cluster" "postgres" {
   name               = "postgres"
   environment        = "PRESTABLE"
