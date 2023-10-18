@@ -5,6 +5,12 @@ locals {
   kibana_sg = yandex_vpc_security_group.kibana.id
   bastion_sg = yandex_vpc_security_group.bastion.id
   zabbix_sg = yandex_vpc_security_group.zabbix.id
+
+  sub_ext = yandex_vpc_subnet.external.id
+  sub_int1 = yandex_vpc_subnet.internal-1.id
+  sub_int2 = yandex_vpc_subnet.internal-2.id
+  
+  ext_server = ["bastion","kibana","zabbix-web"]
 }
 
 ################### Create VM #####################
@@ -29,8 +35,8 @@ resource "yandex_compute_instance" "vm" {
     }
   }
   network_interface {
-    subnet_id          = each.key == "kibana" || each.key == "zabbix-web" || each.key == "bastion" ? yandex_vpc_subnet.external.id : yandex_vpc_subnet.internal-2.id
-    nat                = each.key == "kibana" || each.key == "zabbix-web" || each.key == "bastion" ? true : false
+    subnet_id = contains(local.ext_server, each.key) ? local.sub_ext : local.sub_int2
+    nat = contains(local.ext_server, each.key) ? true : false
     security_group_ids = each.key == "bastion" ? [local.bastion_sg, local.self_sg] : each.key == "kibana" ? [local.kibana_sg, local.self_sg] : each.key == "zabbix-web" ? [local.zabbix_sg, local.self_sg] : [local.self_sg, local.nat_sg]
   }
   metadata = {
@@ -64,7 +70,7 @@ resource "yandex_compute_instance_group" "ig-1" {
     }
     network_interface {
       network_id = yandex_vpc_network.network-1.id
-      subnet_ids = [ yandex_vpc_subnet.internal-1.id, yandex_vpc_subnet.internal-2.id]
+      subnet_ids = [ local.local.sub_int1, local.local.sub_int2]
       security_group_ids = [local.self_sg, local.nat_sg]
     }
 
