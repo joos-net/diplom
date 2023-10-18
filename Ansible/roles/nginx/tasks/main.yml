@@ -12,6 +12,27 @@
     dest: "{{ document_root }}"
     mode: preserve
 
+- name: Disable IPv6 1
+  lineinfile: 
+      path: /etc/hosts 
+      regexp: '^::1 localhost ip6-localhost ip6-loopback$' 
+      line: '#::1 localhost ip6-localhost ip6-loopback'
+      backrefs: yes
+
+- name: Disable IPv6 2
+  lineinfile: 
+      path: /etc/hosts 
+      regexp: '^ff02::1 ip6-allnodes$' 
+      line: '#ff02::1 ip6-allnodes'
+      backrefs: yes
+
+- name: Disable IPv6 3
+  lineinfile: 
+      path: /etc/hosts 
+      regexp: '^ff02::2 ip6-allrouters$' 
+      line: '#ff02::2 ip6-allrouters'
+      backrefs: yes
+
 - name: Add Nginx template
   template:
     src: nginx.conf.j2

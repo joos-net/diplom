@@ -60,6 +60,56 @@
   ansible.builtin.pause:
     minutes: 1
 
+- name: "Check default index"
+  uri:
+    url: "http://{{ groups['kibana'] | join('')}}:5601/api/index_patterns/default"
+    method: GET
+    user: "{{ elastic_user }}"
+    password: "{{ elastic_pass }}"
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json; charset=utf-8"
+      kbn-xsrf: true
+  register: default_index
+
+# - name: Debug
+#   debug:
+#     var: default_index.json.index_pattern_id
+
+- name: "Create index elastic-*"
+  uri:
+    url: "http://{{ groups['kibana'] | join('')}}:5601/api/saved_objects/index-pattern"
+    method: POST
+    user: "{{ elastic_user }}"
+    password: "{{ elastic_pass }}"
+    body: '{"attributes": {"title": "elastic-*","timeFieldName" : "@timestamp"}}'
+    body_format: json
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json; charset=utf-8"
+      kbn-xsrf: true
+  register: elastic_index_id
+  when: '"null" in default_index.json.index_pattern_id'
+
+# - name: Debug
+#   debug:
+#     var: elastic_index_id.json.id
+#   when: '"null" in default_index.json.index_pattern_id'
+
+- name: "Create set elastic default"
+  uri:
+    url: "http://{{ groups['kibana'] | join('')}}:5601/api/index_patterns/default"
+    method: POST
+    user: "{{ elastic_user }}"
+    password: "{{ elastic_pass }}"
+    body: '{"index_pattern_id": "{{ elastic_index_id.json.id }}", "force": true }'
+    body_format: json
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json; charset=utf-8"
+      kbn-xsrf: true
+  when: '"null" in default_index.json.index_pattern_id'
+
 - name: "Create index server-*"
   uri:
     url: "http://{{ groups['kibana'] | join('')}}:5601/api/saved_objects/index-pattern"
@@ -73,10 +123,8 @@
       Content-Type: "application/json; charset=utf-8"
       kbn-xsrf: true
   with_items:
-      - elastic-*
       - kibana-*
       - web-log-*
       - zabbix-web-*
       - zabbix-server-*
-  register: index
-  run_once: true
+  when: '"null" in default_index.json.index_pattern_id'
