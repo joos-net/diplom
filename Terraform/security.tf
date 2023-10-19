@@ -60,7 +60,6 @@ resource "yandex_vpc_security_group" "lb" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 ###################### Bastion ######################
 resource "yandex_vpc_security_group" "bastion" {
   name        = "bastion"
@@ -80,33 +79,14 @@ resource "yandex_vpc_security_group" "bastion" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
-###################### Kibana ######################
-resource "yandex_vpc_security_group" "kibana" {
-  name        = "kibana"
-  description = "kibana sg"
-  network_id  = yandex_vpc_network.network-1.id
-
-  ingress {
-    description    = "Allow in 5601 for kibana"
-    protocol       = "TCP"
-    port           = 5601
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description    = "Allow any to out"
-    protocol       = "ANY"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-###################### Zabbix Web ######################
-resource "yandex_vpc_security_group" "zabbix" {
+###################### Zabbix - Kibana Web ######################
+resource "yandex_vpc_security_group" "zabbix-kibana" {
   name        = "zabbix"
   description = "zabbix sg"
   network_id  = yandex_vpc_network.network-1.id
 
   ingress {
-    description    = "Allow web for zabbix-web"
+    description    = "Allow web for zabbix-web, kibana"
     protocol       = "TCP"
     port           = 80
     v4_cidr_blocks = ["0.0.0.0/0"]

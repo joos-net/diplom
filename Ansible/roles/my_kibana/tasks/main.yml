@@ -1,5 +1,5 @@
 ---
-# tasks file for roles/grafana
+#tasks file for roles/grafana
 
 - name: Install aptitude
   apt:
@@ -50,7 +50,7 @@
       ELASTICSEARCH_USERNAME: "{{ kibana_user }}"
       ELASTICSEARCH_PASSWORD: "{{ hostvars['kilastic']['kibana_pass'] }}"
     ports:
-    - 5601:5601
+    - 80:5601
     log_driver: "{{ log_driver }}"
     log_options:
       max-size: "{{ log_max_size }}"
@@ -62,7 +62,7 @@
 
 - name: "Check default index"
   uri:
-    url: "http://{{ groups['kibana'] | join('')}}:5601/api/index_patterns/default"
+    url: "http://localhost/api/index_patterns/default"
     method: GET
     user: "{{ elastic_user }}"
     password: "{{ elastic_pass }}"
@@ -72,13 +72,13 @@
       kbn-xsrf: true
   register: default_index
 
-# - name: Debug
-#   debug:
-#     var: default_index.json.index_pattern_id
+- name: Debug
+  debug:
+    var: default_index.json.index_pattern_id
 
 - name: "Create index elastic-*"
   uri:
-    url: "http://{{ groups['kibana'] | join('')}}:5601/api/saved_objects/index-pattern"
+    url: "http://localhost/api/saved_objects/index-pattern"
     method: POST
     user: "{{ elastic_user }}"
     password: "{{ elastic_pass }}"
@@ -89,7 +89,7 @@
       Content-Type: "application/json; charset=utf-8"
       kbn-xsrf: true
   register: elastic_index_id
-  when: '"null" in default_index.json.index_pattern_id'
+  when: not default_index.json.index_pattern_id
 
 # - name: Debug
 #   debug:
@@ -98,7 +98,7 @@
 
 - name: "Create set elastic default"
   uri:
-    url: "http://{{ groups['kibana'] | join('')}}:5601/api/index_patterns/default"
+    url: "http://localhost/api/index_patterns/default"
     method: POST
     user: "{{ elastic_user }}"
     password: "{{ elastic_pass }}"
@@ -108,11 +108,11 @@
     headers:
       Content-Type: "application/json; charset=utf-8"
       kbn-xsrf: true
-  when: '"null" in default_index.json.index_pattern_id'
+  when: not default_index.json.index_pattern_id
 
 - name: "Create index server-*"
   uri:
-    url: "http://{{ groups['kibana'] | join('')}}:5601/api/saved_objects/index-pattern"
+    url: "http://localhost/api/saved_objects/index-pattern"
     method: POST
     user: "{{ elastic_user }}"
     password: "{{ elastic_pass }}"
@@ -124,7 +124,28 @@
       kbn-xsrf: true
   with_items:
       - kibana-*
-      - web-log-*
+      - nginx-*
       - zabbix-web-*
       - zabbix-server-*
-  when: '"null" in default_index.json.index_pattern_id'
+  when: not default_index.json.index_pattern_id
+
+
+- name: "Set dashboard"
+  uri:
+    url: "http://localhost/api/saved_objects/_import"
+    method: POST
+    user: "{{ elastic_user }}"
+    password: "{{ elastic_pass }}"
+    body_format: form-multipart
+    body:       
+      file:
+        filename: export.ndjson
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json; charset=utf-8"
+      kbn-xsrf: true
+  register: dashboard
+
+- name: Dashboard info
+  debug:
+    var: dashboard

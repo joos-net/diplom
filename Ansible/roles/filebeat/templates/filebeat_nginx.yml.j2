@@ -7,7 +7,7 @@ filebeat:
     paths:
       - "/var/log/nginx/access.log"
     fields:
-    tags: ["web-log"]
+    tags: ["nginx"]
     fields_under_root: true
     scan_frequency: 5s
   - type: log
@@ -15,7 +15,7 @@ filebeat:
     paths:
       - "/var/log/nginx/error.log"
     fields:
-    tags: ["web-log"]
+    tags: ["nginx"]
     fields_under_root: true
     scan_frequency: 5s
 

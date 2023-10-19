@@ -1,18 +1,15 @@
 ###################### locals Security Group ######################
 locals {
-  self_sg = yandex_vpc_security_group.self.id
-  nat_sg = yandex_vpc_security_group.nat.id
-  kibana_sg = yandex_vpc_security_group.kibana.id
-  bastion_sg = yandex_vpc_security_group.bastion.id
-  zabbix_sg = yandex_vpc_security_group.zabbix.id
-
-  sub_ext = yandex_vpc_subnet.external.id
-  sub_int1 = yandex_vpc_subnet.internal-1.id
-  sub_int2 = yandex_vpc_subnet.internal-2.id
-  
   ext_server = ["bastion","kibana","zabbix-web"]
-}
 
+  sec_groups = {
+    bastion = yandex_vpc_security_group.bastion.id
+    kibana = yandex_vpc_security_group.zabbix-kibana.id
+    zabbix-web = yandex_vpc_security_group.zabbix-kibana.id
+    elastic = yandex_vpc_security_group.nat.id
+    zabbix-server = yandex_vpc_security_group.nat.id
+  }
+}
 ################### Create VM #####################
 resource "yandex_compute_instance" "vm" {
   for_each    = toset(var.name)
@@ -35,9 +32,9 @@ resource "yandex_compute_instance" "vm" {
     }
   }
   network_interface {
-    subnet_id = contains(local.ext_server, each.key) ? local.sub_ext : local.sub_int2
+    subnet_id = contains(local.ext_server, each.key) ? yandex_vpc_subnet.external.id : yandex_vpc_subnet.internal-2.id
     nat = contains(local.ext_server, each.key) ? true : false
-    security_group_ids = each.key == "bastion" ? [local.bastion_sg, local.self_sg] : each.key == "kibana" ? [local.kibana_sg, local.self_sg] : each.key == "zabbix-web" ? [local.zabbix_sg, local.self_sg] : [local.self_sg, local.nat_sg]
+    security_group_ids = [local.sec_groups[each.key], yandex_vpc_security_group.self.id]
   }
   metadata = {
     user-data = "${file("./meta.yml")}"
@@ -70,8 +67,8 @@ resource "yandex_compute_instance_group" "ig-1" {
     }
     network_interface {
       network_id = yandex_vpc_network.network-1.id
-      subnet_ids = [ local.local.sub_int1, local.local.sub_int2]
-      security_group_ids = [local.self_sg, local.nat_sg]
+      subnet_ids = [ yandex_vpc_subnet.internal-1.id, yandex_vpc_subnet.internal-2.id]
+      security_group_ids = [yandex_vpc_security_group.self.id, yandex_vpc_security_group.nat.id]
     }
 
     metadata = {
@@ -110,11 +107,11 @@ resource "local_file" "hosts" {
   content  = <<-EOT
     %{for server in yandex_compute_instance.vm}
     [${server.hostname}]
-    ${server.network_interface[0].ip_address}
+    ${server.fqdn}
     %{endfor}
     %{for web in yandex_compute_instance_group.ig-1.instances[*]}
     [${web.name}]
-    ${web.network_interface[0].ip_address}
+    ${web.fqdn}
     %{endfor}
   EOT
 }
@@ -132,12 +129,12 @@ resource "local_file" "config" {
       %{endfor~}
 
       %{for server in yandex_compute_instance.vm}
-      Host ${server.network_interface.0.ip_address}
+      Host ${server.fqdn}
         ProxyJump bastion
         StrictHostKeyChecking no
       %{endfor~}
       %{for web in yandex_compute_instance_group.ig-1.instances[*]}
-      Host ${web.network_interface.0.ip_address}
+      Host ${web.fqdn}
         ProxyJump bastion
         StrictHostKeyChecking no
       %{endfor~}

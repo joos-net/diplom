@@ -10,7 +10,7 @@ zabbix_agent_package: zabbix-agent
 zabbix_sender_package: zabbix-sender
 zabbix_get_package: zabbix-get
 zabbix_agent_package_state: present
-zabbix_agent_server: "{{ groups['zabbix-server'] | join('')}}"
+zabbix_agent_server: "{{ groups['zabbix-server'] | join('')}}, {{ ansible_default_ipv4.address }}"
 zabbix_agent_serveractive: "{{ groups['zabbix-server'] | join('')}}"
 zabbix_agent2_server: "{{ zabbix_agent_server }}"
 zabbix_agent2_serveractive: "{{ zabbix_agent_serveractive }}"
