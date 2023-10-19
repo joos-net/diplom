@@ -45,6 +45,12 @@
     dest: /etc/nginx/conf.d/status.conf
   notify: Restart Nginx
 
+- name: Add Zabbix-Nginx conf
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify: Restart Nginx
+
 - name: Enable new site
   file:
     src: /etc/nginx/sites-available/default

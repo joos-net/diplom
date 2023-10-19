@@ -10,3 +10,4 @@
 */*.tfstate
 */.DS_Store
 .vscode/*
+*storage.key

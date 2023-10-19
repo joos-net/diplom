@@ -1,5 +1,8 @@
 ---
 # tasks file for git
 
+- name: Test 404
+  shell: '~/diplom/test_404.sh 50'
+
 - name: push README-INFO
   shell: 'cd ~/diplom; git add "README-INFO.md"; git commit -m "Autoupdate $(date)"; git push'
