@@ -1,15 +1,15 @@
 Diplom
    
 Zabbix:
-- Zabbix Server IP - 158.160.9.35
+- Zabbix Server IP - 158.160.66.185
 - Zabbix User - Admin
 - Zabbix Passwort - zabbix
 
 Kibana:
-- Kibana Server IP - 158.160.71.157
+- Kibana Server IP - 158.160.79.24
 - Kibana User - elastic
 - Kibana Passwort - DkIedPPSCbeje34i4
 
 Web:
 - Website - https://jo-os.ru
-- Website IP - 158.160.78.184
+- Website IP - 158.160.21.57
