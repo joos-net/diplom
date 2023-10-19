@@ -72,9 +72,9 @@
       kbn-xsrf: true
   register: default_index
 
-- name: Debug
-  debug:
-    var: default_index.json.index_pattern_id
+# - name: Debug
+#   debug:
+#     var: default_index.json.index_pattern_id
 
 - name: "Create index elastic-*"
   uri:
@@ -96,7 +96,7 @@
 #     var: elastic_index_id.json.id
 #   when: '"null" in default_index.json.index_pattern_id'
 
-- name: "Create set elastic default"
+- name: "Make elastic default"
   uri:
     url: "http://localhost/api/index_patterns/default"
     method: POST
@@ -124,7 +124,7 @@
       kbn-xsrf: true
   with_items:
       - kibana-*
-      - nginx-*
+  #    - nginx-*
       - zabbix-web-*
       - zabbix-server-*
   when: not default_index.json.index_pattern_id
@@ -146,6 +146,6 @@
       kbn-xsrf: true
   register: dashboard
 
-- name: Dashboard info
-  debug:
-    var: dashboard
+# - name: Dashboard info
+#   debug:
+#     var: dashboard

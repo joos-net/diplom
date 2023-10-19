@@ -1,1 +1,3 @@
 zabbix_agent_s: {"web1", "web2", "web3", "kibana", "elastic", "zabbix-web", "zabbix-server"}
+
+zabbix_agent_web: {"web1", "web2", "web3"}
