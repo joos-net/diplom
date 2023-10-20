@@ -88,7 +88,7 @@ auto, порт 80.
 
 При помощи Ansible устанавливаю Zabbix сервер с подключением к бд, далее устанавливаю Zabbix web и после установки web сервера через api создаю группу Netology и dashboard с метриками Netology. На остальные ВМ устанавливаю Zabbix Agent и с помощью api добавляю ВМ в Zabbix server.
 
-![zabbix](https://github.com/joos-net/diplom/blob/main/img/zabbix.png)
+![zabbix](https://github.com/joos-net/diplom/blob/main/img/zabbix2.png)
 
 ### Логи
 Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку 
