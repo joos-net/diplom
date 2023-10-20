@@ -1,5 +1,5 @@
 #Yandex Backup
- resource "yandex_compute_snapshot_schedule" "backup" {
+  resource "yandex_compute_snapshot_schedule" "backup" {
    name = "my7day"
 
    schedule_policy {

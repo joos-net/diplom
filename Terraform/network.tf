@@ -1,19 +1,26 @@
-###################### Network ######################
-resource "yandex_vpc_network" "network-1" {
-  name = "network1"
-}
-###################### NAT gateway and route table configuration ######################
-resource "yandex_vpc_gateway" "nat-gateway" {
-  name = "test-nat-gateway"
-  shared_egress_gateway {}
-}
-resource "yandex_vpc_route_table" "route-table-nat" {
-  name       = "route-table-nat"
-  network_id = yandex_vpc_network.network-1.id
-  static_route {
-    destination_prefix = "0.0.0.0/0"
-    gateway_id         = yandex_vpc_gateway.nat-gateway.id
-  }
+###################### Network - Subnets ######################
+module "net" {
+  source              = "./yc-vpc"
+  labels              = { tag = "example" }
+  network_description = "terraform-created"
+  network_name        = "network-1"
+  create_vpc          = true
+  public_subnets = [
+    {
+      "v4_cidr_blocks" : ["192.168.100.0/24"],
+      "zone" : "ru-central1-b"
+    }
+  ]
+  private_subnets = [
+    {
+      "v4_cidr_blocks" : ["10.0.0.0/24"],
+      "zone" : "ru-central1-a"
+    },
+    {
+      "v4_cidr_blocks" : ["192.168.10.0/24"],
+      "zone" : "ru-central1-b"
+    }
+  ]
 }
 ###################### Static IP ######################
 resource "yandex_vpc_address" "static" {
@@ -31,40 +38,19 @@ resource "yandex_dns_recordset" "rs1" {
   ttl     = 200
   data    = [yandex_vpc_address.static.external_ipv4_address[0].address]
 }
-###################### Subnets ######################
-resource "yandex_vpc_subnet" "internal-1" {
-  name           = "internal-1"
-  zone           = "ru-central1-a"
-  v4_cidr_blocks = ["10.0.0.0/24"]
-  network_id     = yandex_vpc_network.network-1.id
-  route_table_id = yandex_vpc_route_table.route-table-nat.id
-}
-resource "yandex_vpc_subnet" "internal-2" {
-  name           = "internal-2"
-  zone           = "ru-central1-b"
-  v4_cidr_blocks = ["192.168.10.0/24"]
-  network_id     = yandex_vpc_network.network-1.id
-  route_table_id = yandex_vpc_route_table.route-table-nat.id
-}
-resource "yandex_vpc_subnet" "external" {
-  name           = "external"
-  zone           = "ru-central1-b"
-  v4_cidr_blocks = ["192.168.100.0/24"]
-  network_id     = yandex_vpc_network.network-1.id
-}
 ###################### Target group ######################
 resource "yandex_alb_target_group" "web-target" {
   name           = "web-target"  
   target {
-    subnet_id    = yandex_vpc_subnet.internal-1.id
+    subnet_id    = module.net.private_subnets["10.0.0.0/24"].subnet_id
     ip_address   = yandex_compute_instance_group.ig-1.instances[0].network_interface[0].ip_address
   }
   target {
-    subnet_id    = yandex_vpc_subnet.internal-2.id
+    subnet_id    = module.net.private_subnets["192.168.10.0/24"].subnet_id
     ip_address   = yandex_compute_instance_group.ig-1.instances[1].network_interface[0].ip_address
   }
   target {
-    subnet_id    = yandex_vpc_subnet.internal-2.id
+    subnet_id    = module.net.private_subnets["192.168.10.0/24"].subnet_id
     ip_address   = yandex_compute_instance_group.ig-1.instances[2].network_interface[0].ip_address
   }
 }
@@ -121,13 +107,13 @@ resource "yandex_alb_virtual_host" "my-virtual-host" {
 ###################### Load balancer ######################
 resource "yandex_alb_load_balancer" "web-balancer" {
   name               = "web-balancer"
-  network_id         = yandex_vpc_network.network-1.id
-  security_group_ids = [yandex_vpc_security_group.lb.id, yandex_vpc_security_group.self.id]
+  network_id         = module.net.vpc_id
+  security_group_ids = [module.sg-lb.id, module.sg-self.id]
 
   allocation_policy {
     location {
       zone_id   = "ru-central1-b"
-      subnet_id = yandex_vpc_subnet.internal-2.id
+      subnet_id = module.net.private_subnets["192.168.10.0/24"].subnet_id
     }
   }
 

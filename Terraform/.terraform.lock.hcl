@@ -8,9 +8,26 @@ provider "registry.terraform.io/hashicorp/local" {
   ]
 }
 
-provider "registry.terraform.io/yandex-cloud/yandex" {
-  version = "0.99.1"
+provider "registry.terraform.io/hashicorp/random" {
+  version     = "3.5.1"
+  constraints = "> 3.3.0"
   hashes = [
-    "h1:GuSFg9GjcRBzX7g+MMYwa4nX/D8cqiDqvWvzW3M+Aq8=",
+    "h1:sZ7MTSD4FLekNN2wSNFGpM+5slfvpm5A/NLVZiB7CO0=",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/time" {
+  version     = "0.9.1"
+  constraints = "0.9.1"
+  hashes = [
+    "h1:UHcDnIYFZ00uoou0TwPGMwOrE8gTkoRephIvdwDAK70=",
+  ]
+}
+
+provider "registry.terraform.io/yandex-cloud/yandex" {
+  version     = "0.100.0"
+  constraints = "> 0.8.0"
+  hashes = [
+    "h1:ikO5aAOOq5X9geX+msweygS2aNBYGOZWg8M3A4mTGiM=",
   ]
 }

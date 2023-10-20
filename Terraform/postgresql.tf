@@ -3,8 +3,8 @@
 resource "yandex_mdb_postgresql_cluster" "postgres" {
   name               = "postgres"
   environment        = "PRESTABLE"
-  network_id         = yandex_vpc_network.network-1.id
-  security_group_ids = [yandex_vpc_security_group.self.id]
+  network_id         = module.net.vpc_id
+  security_group_ids = [module.sg-self.id]
 
   config {
     version      = 14
@@ -22,12 +22,12 @@ resource "yandex_mdb_postgresql_cluster" "postgres" {
 
   host {
     zone      = "ru-central1-a"
-    subnet_id = yandex_vpc_subnet.internal-1.id
+    subnet_id = module.net.private_subnets["10.0.0.0/24"].subnet_id
   }
 
   host {
     zone      = "ru-central1-b"
-    subnet_id = yandex_vpc_subnet.internal-2.id
+    subnet_id = module.net.private_subnets["192.168.10.0/24"].subnet_id
   }
 }
 ###################### Creare DB User ######################

@@ -3,11 +3,11 @@ locals {
   ext_server = ["bastion","kibana","zabbix-web"]
 
   sec_groups = {
-    bastion = yandex_vpc_security_group.bastion.id
-    kibana = yandex_vpc_security_group.zabbix-kibana.id
-    zabbix-web = yandex_vpc_security_group.zabbix-kibana.id
-    elastic = yandex_vpc_security_group.nat.id
-    zabbix-server = yandex_vpc_security_group.nat.id
+    bastion = module.sg-bastion.id
+    kibana = module.sg-zabb-kib.id
+    zabbix-web = module.sg-zabb-kib.id
+    elastic = module.sg-nat.id
+    zabbix-server = module.sg-nat.id
   }
 }
 ################### Create VM #####################
@@ -32,9 +32,9 @@ resource "yandex_compute_instance" "vm" {
     }
   }
   network_interface {
-    subnet_id = contains(local.ext_server, each.key) ? yandex_vpc_subnet.external.id : yandex_vpc_subnet.internal-2.id
+    subnet_id = contains(local.ext_server, each.key) ? module.net.public_subnets["192.168.100.0/24"].subnet_id : module.net.private_subnets["192.168.10.0/24"].subnet_id
     nat = contains(local.ext_server, each.key) ? true : false
-    security_group_ids = [local.sec_groups[each.key], yandex_vpc_security_group.self.id]
+    security_group_ids = [local.sec_groups[each.key], module.sg-self.id]
   }
   metadata = {
     user-data = "${file("./meta.yml")}"
@@ -66,9 +66,9 @@ resource "yandex_compute_instance_group" "ig-1" {
       }
     }
     network_interface {
-      network_id = yandex_vpc_network.network-1.id
-      subnet_ids = [ yandex_vpc_subnet.internal-1.id, yandex_vpc_subnet.internal-2.id]
-      security_group_ids = [yandex_vpc_security_group.self.id, yandex_vpc_security_group.nat.id]
+      network_id = module.net.vpc_id
+      subnet_ids = [ module.net.private_subnets["10.0.0.0/24"].subnet_id, module.net.private_subnets["192.168.10.0/24"].subnet_id]
+      security_group_ids = [module.sg-self.id, module.sg-nat.id]
     }
 
     metadata = {
@@ -97,7 +97,7 @@ resource "yandex_compute_instance_group" "ig-1" {
   }
 }
 ################### Postgres DB ID for Ansible ######################
-resource "local_file" "private_key" {
+  resource "local_file" "private_key" {
   content  = yandex_mdb_postgresql_cluster.postgres.host[0].fqdn
   filename = pathexpand("~/Desktop/very_secure_dir/postgresql_id.txt")
 }
