@@ -102,6 +102,7 @@ Terraform создаю ВМ для Elasticsearch и Kibana.
 При помощи Ansible устанавливаю на Elasticsearch - докер контейнеры Elasticsearch и Logstash, на Kibana - докер контейнер Kibana. На ВМ устанавливаю докер контейнеры Filebeat и в зависимости от ВМ собираю логи nginx или syslog.
 
 ![logs](https://github.com/joos-net/diplom/blob/main/img/logs.png)
+![logs2](https://github.com/joos-net/diplom/blob/main/img/logs2.png)
 
 ### Сеть
 Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application 
