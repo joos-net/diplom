@@ -158,6 +158,6 @@ resource "local_file" "readme" {
 
    Web:
    - Website - https://jo-os.ru
-   - Website IP - ${yandex_vpc_address.static.external_ipv4_address[0].address}
+   - Website IP - ${module.alb.alb_load_balancer_public_ips[0]}
   EOT
 }

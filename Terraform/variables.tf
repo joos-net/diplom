@@ -40,6 +40,9 @@ variable "my_domane" {
 variable "web_certificate" {
   default = "fpq86e0q4feikknb7bf5"
 }
+variable "zone_name" {
+  default = "jo-os"
+}
 ###################### Instance Group ######################
 variable "account_id" {
   default = "ajeh9ejg8j4v3mjur30k"

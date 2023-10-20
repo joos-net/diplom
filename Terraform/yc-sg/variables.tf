@@ -65,7 +65,7 @@ variable "ingress_rules_with_sg_ids" {
 variable "self" {
   type        = bool
   description = "Allow to communicate inside security group"
-  default     = true
+  default     = false
 }
 
 variable "nlb_hc" {
