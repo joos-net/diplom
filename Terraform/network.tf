@@ -1,7 +1,7 @@
 ###################### Network - Subnets ######################
 module "net" {
   source              = "./yc-vpc"
-  labels              = { tag = "example" }
+  labels              = { tag = "my-net" }
   network_description = "terraform-created"
   network_name        = "network-1"
   create_vpc          = true
@@ -24,16 +24,15 @@ module "net" {
 }
 ###################### A DNS Record ######################
 module "zabbix_dns" {
-  source = "./domane"
+  source = "./domain"
   name = "zabbix"
   data = [yandex_compute_instance.vm["zabbix-web"].network_interface.0.nat_ip_address]
 }
 module "kibana_dns" {
-  source = "./domane"
+  source = "./domain"
   name = "kibana"
   data = [yandex_compute_instance.vm["kibana"].network_interface.0.nat_ip_address]
 }
-
 ###################### Load balancer ######################
 module "alb" {
   source               = "./yc-alb"
@@ -44,7 +43,6 @@ module "alb" {
 
   alb_load_balancer = {
     name = "alb-test"
-
 ###################### Target group ######################
     alb_target_groups = {
       "target-group-a" = {

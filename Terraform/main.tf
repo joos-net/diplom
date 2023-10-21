@@ -13,7 +13,6 @@ locals {
   public_subnet = module.net.public_subnets["192.168.100.0/24"].subnet_id
   private_subnet1 = module.net.private_subnets["10.0.0.0/24"].subnet_id
   private_subnet2 = module.net.private_subnets["192.168.10.0/24"].subnet_id
-
 }
 ################### Create VM #####################
 resource "yandex_compute_instance" "vm" {

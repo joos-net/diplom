@@ -1,8 +1,12 @@
 ---
 # tasks file for git
 
+- name: Wait 1 minute - website start
+  ansible.builtin.pause:
+    minutes: 1
+
 - name: Test 404
-  shell: '~/diplom/test_404.sh 50'
+  shell: '~/diplom/test_404.sh 200'
 
 - name: push README-INFO
   shell: 'cd ~/diplom; git add "README-INFO.md"; git commit -m "Autoupdate $(date)"; git push'
