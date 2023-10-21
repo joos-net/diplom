@@ -9,6 +9,11 @@ locals {
     elastic = module.sg-nat.id
     zabbix-server = module.sg-nat.id
   }
+
+  public_subnet = module.net.public_subnets["192.168.100.0/24"].subnet_id
+  private_subnet1 = module.net.private_subnets["10.0.0.0/24"].subnet_id
+  private_subnet2 = module.net.private_subnets["192.168.10.0/24"].subnet_id
+
 }
 ################### Create VM #####################
 resource "yandex_compute_instance" "vm" {
@@ -32,7 +37,7 @@ resource "yandex_compute_instance" "vm" {
     }
   }
   network_interface {
-    subnet_id = contains(local.ext_server, each.key) ? module.net.public_subnets["192.168.100.0/24"].subnet_id : module.net.private_subnets["192.168.10.0/24"].subnet_id
+    subnet_id = contains(local.ext_server, each.key) ? local.public_subnet : local.private_subnet2
     nat = contains(local.ext_server, each.key) ? true : false
     security_group_ids = [local.sec_groups[each.key], module.sg-self.id]
   }
@@ -67,7 +72,7 @@ resource "yandex_compute_instance_group" "ig-1" {
     }
     network_interface {
       network_id = module.net.vpc_id
-      subnet_ids = [ module.net.private_subnets["10.0.0.0/24"].subnet_id, module.net.private_subnets["192.168.10.0/24"].subnet_id]
+      subnet_ids = [ local.private_subnet1, local.private_subnet2]
       security_group_ids = [module.sg-self.id, module.sg-nat.id]
     }
 
@@ -140,18 +145,20 @@ resource "local_file" "config" {
       %{endfor~}
   EOT
 }
-################### Create README ######################
+################### Create README INFO ######################
 resource "local_file" "readme" {
   filename = pathexpand("~/diplom/README-INFO.md")
   content  = <<-EOT
    Diplom
    
    Zabbix:
+   - Zabbix Web - http://zabbix.jo-os.ru
    - Zabbix Server IP - ${yandex_compute_instance.vm["zabbix-web"].network_interface.0.nat_ip_address}
    - Zabbix User - ${var.zabbix_user}
    - Zabbix Passwort - ${var.zabbix_pass}
 
    Kibana:
+   - Kibana Web - http://kibana.jo-os.ru
    - Kibana Server IP - ${yandex_compute_instance.vm["kibana"].network_interface.0.nat_ip_address}
    - Kibana User - ${var.elastic_user}
    - Kibana Passwort - ${var.elastic_pass}
